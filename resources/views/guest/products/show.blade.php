@@ -14,11 +14,8 @@
 
         </div>
 
-
-        @auth
-            <div class="actions">
-                <a class="btn btn-dark" href="{{ route('admin.products.index') }}">Back to Admin</a>
-            </div>
-        @endauth
+        <div class="actions">
+            <a class="btn btn-dark" href="{{ route('products.index') }}">Back to Products</a>
+        </div>
     </div>
 @endsection
