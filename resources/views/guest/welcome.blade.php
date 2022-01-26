@@ -6,7 +6,8 @@
         <div class="container">
             <h1 class="my-5">Hola</h1>
             <p>
-                <a class="btn btn-primary btn-lg" href="" role="button">Vai allo shop</a>
+                <a class="btn btn-primary btn-lg" href="{{ route('products.index') }}" role="button">
+                    Vai allo shop</a>
             </p>
         </div>
     </div>

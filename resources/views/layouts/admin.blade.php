@@ -65,6 +65,14 @@
                                     Dashboard
                                 </a>
                             </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.products.index') }}">
+                                    <i class="fas fa-shopping-bag fa-lg fa-fw"></i>
+                                    Products
+                                </a>
+                            </li>
+
                         </ul>
 
                     </div>
