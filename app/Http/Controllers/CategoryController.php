@@ -1,14 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Category;
-use App\Models\Post;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
-class PostController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +15,6 @@ class PostController extends Controller
     public function index()
     {
         //
-        return view('admin.posts.index', ['posts' => Post::all()]);
     }
 
     /**
@@ -28,8 +24,6 @@ class PostController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
-        return view('admin.posts.create', compact('categories'));
     }
 
     /**
@@ -40,41 +34,27 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-
-        //ddd($request->all());
-
-        $validated = $request->validate([
-            'name' => 'required',
-            'image' => 'nullable',
-            'category_id' => 'nullable', 'exists:categories,id',
-        ]);
-
-        $validated['slug'] = Str::slug($validated['name']);
-
-        Post::create($validated);
-
-        return redirect()->route('admin.posts.index');
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Post  $post
+     * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post)
+    public function show(Category $category)
     {
         //
-        return view('guest.posts.show', compact('post'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Post  $post
+     * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function edit(Post $post)
+    public function edit(Category $category)
     {
         //
     }
@@ -83,10 +63,10 @@ class PostController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Post  $post
+     * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, Category $category)
     {
         //
     }
@@ -94,10 +74,10 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Post  $post
+     * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function destroy(Category $category)
     {
         //
     }

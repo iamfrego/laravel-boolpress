@@ -14,7 +14,7 @@ class PostSeeder extends Seeder
      */
     public function run(Faker $faker)
     {
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $post = new Post();
             $post->name = $faker->sentence();
             $post->image = $faker->imageUrl(300, 300, 'Posts');
