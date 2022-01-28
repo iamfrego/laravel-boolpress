@@ -80,6 +80,13 @@
                                 </a>
                             </li>
 
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.categories.index') }}">
+                                    <i class="fas fa-bookmark fa-lg fa-fw text-black"></i>
+                                    Category
+                                </a>
+                            </li>
+
                         </ul>
 
                     </div>

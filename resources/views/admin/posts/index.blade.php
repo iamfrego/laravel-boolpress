@@ -2,7 +2,6 @@
 
 
 @section('content')
-
     <h1>Posts</h1>
     <a name="" id="" class="btn btn-dark" href="{{ route('admin.posts.create') }}" role="button">Create Post</a>
     <table class="table">
@@ -33,6 +32,4 @@
             @endforeach
         </tbody>
     </table>
-
-
 @endsection
