@@ -28,7 +28,6 @@ class ProductController extends Controller
     {
         return view('admin.products.create');
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -69,7 +68,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        return view('admin.products.edit', compact('product'));
     }
 
     /**
@@ -81,7 +80,10 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $product_data = $request->all();
+        $product->update($product_data);
+
+        return redirect()->route('admin.products.index');
     }
 
     /**
@@ -92,6 +94,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
+        return redirect()->route('admin.products.index');
     }
 }
