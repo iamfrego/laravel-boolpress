@@ -20,14 +20,18 @@ Route::get('/', function () {
 
 Route::resource('products', ProductController::class)->only(['index', 'show']);
 Route::resource('posts', PostController::class)->only(['index', 'show']);
+Route::get('tags/{tag}/posts', 'TagController@posts')->name('tags.posts');
 
 
 
 Auth::routes();
+
+Auth::routes(['register' => false]);
 
 Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/', 'HomeController@index')->name('dashboard');
     Route::resource('products', ProductController::class);
     Route::resource('posts', PostController::class);
     Route::resource('categories', CategoryController::class);
+    Route::resource('tags', TagController::class);
 });

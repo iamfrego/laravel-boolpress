@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class PostController extends Controller
@@ -51,6 +52,8 @@ class PostController extends Controller
 
         $validated['slug'] = Str::slug($validated['name']);
 
+        $validated['user_id'] = Auth::id();
+        // ddd($validated);
         Post::create($validated);
 
         return redirect()->route('admin.posts.index');
