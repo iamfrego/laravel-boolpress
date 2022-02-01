@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Category;
 use App\Models\Post;
-use Illuminate\Http\Request;
+use App\Models\Category;
+use App\Models\Tag;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
@@ -18,8 +21,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
-        return view('admin.posts.index', ['posts' => Post::all()]);
+        $posts = Auth::user()->posts()->orderByDesc('id')->get();
+        return view('admin.posts.index', compact('posts'));
     }
 
     /**
@@ -30,7 +33,8 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.posts.create', compact('categories'));
+        $tags = Tag::all();
+        return view('admin.posts.create', compact('categories', 'tags'));
     }
 
     /**
@@ -41,21 +45,33 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-
         //ddd($request->all());
-
         $validated = $request->validate([
-            'name' => 'required',
-            'image' => 'nullable',
-            'category_id' => 'nullable', 'exists:categories,id',
+            'name' => ['required', 'unique:posts', 'max:200'],
+            'image' => ['nullable', 'image', 'max:1500'],
+            'category_id' => ['nullable', 'exists:categories,id'],
         ]);
 
-        $validated['slug'] = Str::slug($validated['name']);
+        if ($request->file('image')) {
+            $image_path = Storage::put('post_images', $request->file('image'));
+            $validated['image'] = $image_path;
+        }
 
-        $validated['user_id'] = Auth::id();
         // ddd($validated);
-        Post::create($validated);
 
+
+        //ddd($validated);
+        $validated['slug'] = Str::slug($validated['name']);
+        $validated['user_id'] = Auth::id();
+
+        $post = Post::create($validated);
+        if ($request->has('tags')) {
+            $request->validate([
+                'tags' => ['nullable', 'exists:tags,id']
+            ]);
+            $post->tags()->attach($request->tags);
+        }
+        // ddd($validated);
         return redirect()->route('admin.posts.index');
     }
 
@@ -80,7 +96,14 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $categories = Category::all();
-        return view('admin.posts.edit', compact('post', 'categories'));
+        $tags = Tag::all();
+
+
+        if (Auth::id() === $post->user_id) {
+            return view('admin.posts.edit', compact('post', 'categories', 'tags'));
+        } else {
+            abort(403);
+        }
     }
 
     /**
@@ -92,12 +115,40 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        if (Auth::id() === $post->user_id) {
 
-        $post_data = $request->all();
-        $post->update($post_data);
+            $validated = $request->validate([
+                'name' => ['required', Rule::unique('posts')->ignore($post->id), 'max:200'],
+                'image' => ['nullable', 'image', 'max:1500'],
+                'category_id' => ['nullable', 'exists:categories,id'],
+                'tags' => ['nullable', 'exists:tags,id']
+            ]);
 
-        return redirect()->route('admin.posts.index');
+
+            if ($request->file('image')) {
+
+                Storage::delete($post->image);
+
+                $image_path = $request->file('image')->store('post_image');
+
+                $validated['image'] = $image_path;
+            }
+
+            if ($request->has('tags')) {
+                $request->validate([
+                    'tags' => ['nullable', 'exists:tags,id']
+                ]);
+                $post->tags()->sync($request->tags);
+            }
+
+            $post->update($validated);
+
+            return redirect()->route('admin.posts.index');
+        } else {
+            abort(403);
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -107,8 +158,11 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
-        $post->delete();
-        return redirect()->route('admin.posts.index');
+        if (Auth::id() === $post->user_id) {
+            $post->delete();
+            return redirect()->route('admin.posts.index');
+        } else {
+            abort(403);
+        }
     }
 }

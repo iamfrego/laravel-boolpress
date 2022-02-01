@@ -20,7 +20,8 @@ Route::get('/', function () {
 
 Route::resource('products', ProductController::class)->only(['index', 'show']);
 Route::resource('posts', PostController::class)->only(['index', 'show']);
-Route::get('tags/{tag}/posts', 'TagController@posts')->name('tags.posts');
+Route::get('categories/posts', 'CategoryController@posts')->name('categories.posts');
+Route::get('tags/posts', 'TagController@posts')->name('tags.index');
 
 
 
