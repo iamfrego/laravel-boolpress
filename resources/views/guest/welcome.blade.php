@@ -13,6 +13,11 @@
                 <a class="btn btn-dark btn-lg" href="{{ route('posts.index') }}" role="button">
                     Vai ai post</a>
             </p>
+
+            <p>
+                <a class="btn btn-dark btn-lg" href="{{ route('blog') }}" role="button">
+                    Vai al blog</a>
+            </p>
         </div>
     </div>
 

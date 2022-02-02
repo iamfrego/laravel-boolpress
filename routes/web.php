@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -23,7 +24,9 @@ Route::resource('posts', PostController::class)->only(['index', 'show']);
 Route::get('categories/posts', 'CategoryController@posts')->name('categories.posts');
 Route::get('tags/posts', 'TagController@posts')->name('tags.index');
 
-
+Route::get('blog', function () {
+    return view('blog');
+})->name('blog');
 
 Auth::routes();
 
