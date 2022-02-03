@@ -15,6 +15,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Auth::routes();
+
+Auth::routes(['register' => false]);
+
+Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    Route::get('/', 'HomeController@index')->name('dashboard');
+    Route::resource('products', ProductController::class);
+    Route::resource('posts', PostController::class);
+    Route::resource('categories', CategoryController::class);
+    Route::resource('tags', TagController::class);
+});
+
 Route::get('/{any}', function () {
     return view('guest.welcome');
 })->where('any', '.*');
@@ -29,17 +41,7 @@ Route::get('blog', function () {
     return view('blog');
 })->name('blog');
 
-Auth::routes();
 
-Auth::routes(['register' => false]);
-
-Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('auth')->group(function () {
-    Route::get('/', 'HomeController@index')->name('dashboard');
-    Route::resource('products', ProductController::class);
-    Route::resource('posts', PostController::class);
-    Route::resource('categories', CategoryController::class);
-    Route::resource('tags', TagController::class);
-});
 
 
 Route::get('/', function () {
