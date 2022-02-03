@@ -15,9 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/{any}', function () {
     return view('guest.welcome');
-})->name('home');
+})->where('any', '.*');
+
 
 Route::resource('products', ProductController::class)->only(['index', 'show']);
 Route::resource('posts', PostController::class)->only(['index', 'show']);
@@ -39,3 +40,8 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('auth')->
     Route::resource('categories', CategoryController::class);
     Route::resource('tags', TagController::class);
 });
+
+
+Route::get('/', function () {
+    return view('guest.welcome');
+})->name('home');
